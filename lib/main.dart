@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project/form_page.dart';
-import 'package:flutter_project/layouts.dart';
-import 'package:flutter_project/set_state.dart';
-import 'package:flutter_project/stack.dart';
-import 'package:flutter_project/video_player.dart';
-import 'package:flutter_project/widget_lifecycle.dart';
-import 'custom_layout.dart';
+import 'package:flutter_project/multi_language_support.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() {
+import 'app_localizations.dart';
+
+void main() async {
   runApp(const MyApp());
 }
 class MyApp extends StatefulWidget {
@@ -24,21 +21,46 @@ class _MyAppState extends State<MyApp> {
       isDarkMode = isDark;
     });
   }
+  Locale _locale = const Locale('en', '');
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLocale();
+  }
+
+  void _loadLocale() async {
+    await AppLocalizations.load(_locale);
+    setState(() {});
+  }
+
+  void _changeLanguage(String languageCode) {
+    setState(() {
+      _locale = Locale(languageCode, '');
+      AppLocalizations.load(_locale);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''),
+        Locale('es', ''),
+      ],
+
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(),  // Light theme
       darkTheme: ThemeData.dark(),  // Dark theme
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-     // theme: ThemeData.dark(useMaterial3: true),
-      //  home: const Layouts()
-       home: const VideoPlayerPage(videoUrl: 'assets/videos/ocean.mp4'),
-     // home: const CustomLayout()
-     // home: WidgetLifeCycle()
-      // home:StackLayer(),
-      //home: FormPage(key: UniqueKey(),isDarkMode: isDarkMode,onThemeChanged: toggleTheme),
-
+     // home :  Concepts(isDarkMode : isDarkMode,onThemeChanged : toggleTheme),
+      home: MultiLanguageSupportPage(onChangeLanguage: _changeLanguage),
     );
   }
 }

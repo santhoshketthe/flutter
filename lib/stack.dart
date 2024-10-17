@@ -10,7 +10,9 @@ class StackLayer extends StatefulWidget{
 class StackLayout extends State<StackLayer>{
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Scaffold(
+        appBar: AppBar(title: const Text("future Builder")),
+    body: Stack(
       children:[
         Container(
           width: 200,
@@ -35,6 +37,6 @@ class StackLayout extends State<StackLayer>{
           ),
         ),
       ],
-    );
+    ));
   }
 }
